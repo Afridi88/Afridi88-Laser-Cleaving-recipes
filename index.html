@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Laser Cleaving Recipes</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f0f2f5;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+.header{
+    background:#12395b;
+    color:white;
+    padding:20px;
+}
+
+.header h1{
+    margin:0;
+    font-size:32px;
+}
+
+.header p{
+    margin-top:6px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#dfe7ef;
+    padding:12px;
+    text-align:left;
+    border:1px solid #c8d0d8;
+}
+
+td{
+    padding:12px;
+    border:1px solid #d6dde5;
+    vertical-align:top;
+}
+
+tr:nth-child(even){
+    background:#f9fbfc;
+}
+
+tr:hover{
+    background:#eef5fb;
+}
+
+.footer{
+    text-align:center;
+    padding:16px;
+    color:#666;
+    font-size:13px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Laser Cleaving Recipe Manager</h1>
+        <p>Sagitta Laser Cleaver Recipe Database</p>
+    </div>
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>Recipe</th>
+                <th>CCJ</th>
+                <th>Jig</th>
+                <th>Stage Position</th>
+                <th>Column Angle</th>
+                <th>Cleave Angle</th>
+                <th>RPT</th>
+                <th>RPM</th>
+                <th>PWR</th>
+                <th>PWM</th>
+                <th>Asset</th>
+            </tr>
+
+        </thead>
+
+        <tbody id="recipeTable"></tbody>
+
+    </table>
+
+    <div class="footer">
+        OZ Optics Limited — Internal Laser Cleaving Recipe Tool
+    </div>
+
+</div>
+
+<script>
+
+const recipes = [
+
+{
+    name:"Infinera",
+    ccj:"-",
+    jig:"Infinera",
+    stage:"10.75 ± 0.05",
+    column:"1.5° – 2°",
+    cleave:"4° ± 0.5°",
+    rpt:"1 / 0 / 18",
+    rpm:"200 / 200 / 200",
+    pwr:"29 / 15 / 30",
+    pwm:"-",
+    asset:"CE003540"
+},
+
+{
+    name:"337883-0",
+    ccj:"200/240 (ShockWave Medical Inc.)",
+    jig:"D132182-03",
+    stage:"10.80 ± 0.05",
+    column:"11°",
+    cleave:"0° ± 0.3° (Flat)",
+    rpt:"1 / 0 / 24",
+    rpm:"200 / 200 / 200",
+    pwr:"90 / 16 / 60",
+    pwm:"210",
+    asset:"CE003540"
+},
+
+{
+    name:"Oclaro PMF",
+    ccj:"-",
+    jig:"Oclaro",
+    stage:"9.25",
+    column:"10.7°",
+    cleave:"4° ± 0.5°",
+    rpt:"1 / 0 / 18",
+    rpm:"200 / 200 / 200",
+    pwr:"29 / 15 / 30",
+    pwm:"65",
+    asset:"CE003990"
+},
+
+{
+    name:"Oclaro SMF",
+    ccj:"-",
+    jig:"Oclaro",
+    stage:"10.75 ± 0.05",
+    column:"7.6°",
+    cleave:"Flat",
+    rpt:"1 / 0 / 16",
+    rpm:"200 / 200 / 200",
+    pwr:"29 / 20 / 33",
+    pwm:"55",
+    asset:"CE003990"
+},
+
+{
+    name:"338371",
+    ccj:"-",
+    jig:"Infinera 1.4 Kovar",
+    stage:"10.75 ± 0.05",
+    column:"9.8°",
+    cleave:"Flat",
+    rpt:"1 / 0 / 20",
+    rpm:"200 / 200 / 200",
+    pwr:"28 / 20 / 35",
+    pwm:"65",
+    asset:"CE003540"
+},
+
+{
+    name:"338810-0",
+    ccj:"8.4/125/900",
+    jig:"D132182-03",
+    stage:"10.95",
+    column:"11°",
+    cleave:"Flat",
+    rpt:"1 / 0 / 16",
+    rpm:"200 / 200 / 200",
+    pwr:"29 / 20 / 33",
+    pwm:"65",
+    asset:"CE003540"
+},
+
+{
+    name:"339870-0",
+    ccj:"8.4/125/900",
+    jig:"317696-01",
+    stage:"10.90",
+    column:"9.7°",
+    cleave:"Flat",
+    rpt:"1 / 0 / 20",
+    rpm:"200 / 200 / 200",
+    pwr:"28 / 20 / 33",
+    pwm:"65",
+    asset:"CE003540"
+},
+
+{
+    name:"340738-0",
+    ccj:"200/240",
+    jig:"D132182-03",
+    stage:"10.80",
+    column:"11°",
+    cleave:"0° ± 0.3° (Flat)",
+    rpt:"1 / 0 / 24",
+    rpm:"200 / 200 / 200",
+    pwr:"90 / 16 / 60",
+    pwm:"210",
+    asset:"CE003540"
+},
+
+{
+    name:"xxxxxxxx",
+    ccj:"8/125",
+    jig:"Infinera 1.4 Kovar",
+    stage:"11.15 ± 0.5",
+    column:"2.05°",
+    cleave:"8° ± 0.5°",
+    rpt:"1 / 0 / 20",
+    rpm:"200 / 200 / 200",
+    pwr:"28 / 20 / 35",
+    pwm:"65",
+    asset:"CE003540"
+}
+
+];
+
+const table = document.getElementById("recipeTable");
+
+recipes.forEach(recipe => {
+
+    table.innerHTML += `
+
+    <tr>
+
+        <td>${recipe.name}</td>
+        <td>${recipe.ccj}</td>
+        <td>${recipe.jig}</td>
+        <td>${recipe.stage}</td>
+        <td>${recipe.column}</td>
+        <td>${recipe.cleave}</td>
+        <td>${recipe.rpt}</td>
+        <td>${recipe.rpm}</td>
+        <td>${recipe.pwr}</td>
+        <td>${recipe.pwm}</td>
+        <td>${recipe.asset}</td>
+
+    </tr>
+
+    `;
+
+});
+
+</script>
+
+</body>
+</html>
